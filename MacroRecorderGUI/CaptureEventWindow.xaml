@@ -1,0 +1,34 @@
+﻿<Window x:Class="MacroRecorderGUI.CaptureEventWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MacroRecorderGUI"
+        mc:Ignorable="d"
+        Title="CaptureEventWindow" Height="252.101" Width="800">
+    <Grid>
+        <Label Content="Capture Event" HorizontalAlignment="Left" Margin="317,23,0,0" VerticalAlignment="Top" Width="136" FontSize="16" FontWeight="Bold"/>
+        <ComboBox x:Name="ComboBoxEvent" HorizontalAlignment="Left" Margin="54,65,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBoxItem x:Name="Mouse_Event" Content="Mouse Event" HorizontalAlignment="Left" Width="118" AutomationProperties.Name="MouseEvent"/>
+            <ComboBoxItem x:Name="Keybaord_Event" Content="Keyboard Event" HorizontalAlignment="Left" Width="118"/>
+        </ComboBox>
+        <TextBox x:Name="MouseXTextBox" HorizontalAlignment="Left" Height="23" Margin="80,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Visibility="Visible" TextChanged="TextBox_TextChanged"/>
+        <Label x:Name="MouseXLabel" Content="X:" HorizontalAlignment="Left" Margin="55,109,0,0" VerticalAlignment="Top" Visibility="Visible"/>
+        <TextBox x:Name="MouseYTextBox" HorizontalAlignment="Left" Height="23" Margin="250,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Visibility="Visible"/>
+        <Label x:Name="MouseYLabel" Content="Y:" HorizontalAlignment="Left" Margin="225,109,0,0" VerticalAlignment="Top" Visibility="Visible"/>
+        <Label x:Name="ActionLabel" Content="Action" HorizontalAlignment="Left" Margin="389,109,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="ActionType" HorizontalAlignment="Left" Margin="454,113,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem x:Name="LeftDown" Content="LeftDown" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem x:Name="LeftUp" Content="LeftUp" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem x:Name="RightDown" Content="RightDown" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem x:Name="RightUp" Content="RightUp" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem x:Name="MiddleDown" Content="MiddleDown" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem x:Name="MiddleUp" Content="MiddleUp" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem x:Name="XDown" Content="XDown" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem x:Name="XUp" Content="XUp" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem x:Name="MouseMove" Content="MouseMove" HorizontalAlignment="Left" Width="118" Height="18"/>
+        </ComboBox>
+        <Button x:Name="EnterEvent" Content="Enter" HorizontalAlignment="Left" Margin="54,163,0,0" VerticalAlignment="Top" Width="75" Click="EnterEvent_Click"/>
+
+    </Grid>
+</Window>

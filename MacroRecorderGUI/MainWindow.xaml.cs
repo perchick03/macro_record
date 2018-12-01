@@ -103,15 +103,52 @@ namespace MacroRecorderGUI
 
         private void CaptureEvent_Click(object sender, RoutedEventArgs e)
         {
-            this.KeyDown += new KeyEventHandler(Form1_KeyEvent);
-            this.KeyUp += new KeyEventHandler(Form1_KeyEvent);
+            //var NewWindow = new CaptureEventWindow();
+            //NewWindow.Show();
+            SimulatedMouseEvent.MousePoint position = SimulatedMouseEvent.GetCursorPosition();
+            InputEvent virtualMouse = new InputEvent
+            {
+                MouseEvent = new InputEvent.Types.MouseEventType
+                {
+                    X = position.X,
+                    Y = position.Y,
+                    ActionType = (int)SimulatedMouseEvent.MouseEventFlags.Absolute,
+                },
+                TimeSinceStartOfRecording = GetCuurentTimestamp((DataContext as MainWindowViewModel)?.ActiveMacro?.Events)
+            };
+            (DataContext as MainWindowViewModel)?.ActiveMacro?.AddEvent(virtualMouse);
+            var NewWindow = new CaptureEventWindow();
+            NewWindow.Show();
+
+            //this.KeyDown += new KeyEventHandler(Form1_KeyEvent);
+            //this.KeyUp += new KeyEventHandler(Form1_KeyEvent);
+            //this.MouseEnter += new MouseEventHandler(MouseRecorder_ActionRecorded);
         }
-        static private ulong GetCuurentTimestamp(ObservableCollection<InputEvent> events)
+        private void MouseRecorder_ActionRecorded(object sender, MouseEventArgs e)
+        {
+            //InputEvent virtualMouse = new InputEvent
+            //{
+            //    MouseEvent = new InputEvent.Types.MouseEventType
+            //    {
+            //        X = System.Windows.Forms.Control.MousePosition.X,
+            //        Y = System.Windows.Forms.Control.MousePosition.Y,
+            //        ActionType = 0,
+            //        WheelRotation = 0,
+            //        RelativePosition = false,
+            //        MappedToVirtualDesktop = false
+            //    }, 
+            //    TimeSinceStartOfRecording = 0
+            //};
+            //(DataContext as MainWindowViewModel)?.ActiveMacro?.AddEvent(virtualMouse);
+            //this.MouseEnter -= new MouseEventHandler(MouseRecorder_ActionRecorded);
+        }
+        static public ulong GetCuurentTimestamp(ObservableCollection<InputEvent> events)
         {
             return events.Count > 0 ? events[events.Count - 1].TimeSinceStartOfRecording : 0;
         }
         void Form1_KeyEvent(object sender, KeyEventArgs e)
         {
+      
             InputEvent capturedKey = new InputEvent
             {
                 KeyboardEvent = new InputEvent.Types.KeyboardEventType
@@ -126,7 +163,8 @@ namespace MacroRecorderGUI
                 this.KeyUp -= new KeyEventHandler(Form1_KeyEvent);
                 this.KeyDown -= new KeyEventHandler(Form1_KeyEvent);
             }
-            (DataContext as MainWindowViewModel)?.ActiveMacro?.AddEvent(capturedKey);       
+            (DataContext as MainWindowViewModel)?.ActiveMacro?.AddEvent(capturedKey);
+            
         }
         
     }
