@@ -24,6 +24,9 @@ namespace MacroRecorderGUI
         public CaptureEventWindow()
         {
             InitializeComponent();
+            MouseXTextBox.Text = "X";
+            MouseYTextBox.Text = "Y";
+
         }
         static private uint GetMouseAction(string MouseAction)
         {
@@ -69,11 +72,6 @@ namespace MacroRecorderGUI
             
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         private void ActionType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //MessageBox.Show(MouseXTextBox.Text);
@@ -94,17 +92,19 @@ namespace MacroRecorderGUI
         {
             if(!string.IsNullOrEmpty(MouseXTextBox.Text) && !string.IsNullOrEmpty(MouseYTextBox.Text)&& (ActionType.SelectedIndex != -1))
             {
+                
                 InputEvent virtualMouse = new InputEvent
                 {
                     MouseEvent = new InputEvent.Types.MouseEventType
                     {
-                        X = 1, //Convert.ToInt32(MouseXTextBox.Text),
-                        Y = 1,  //Convert.ToInt32(MouseYTextBox.Text),
-                        ActionType = 1 //GetMouseAction(((ComboBoxItem)ActionType.SelectedItem).Content.ToString())
+                        X = Convert.ToInt32(MouseXTextBox.Text),
+                        Y = Convert.ToInt32(MouseYTextBox.Text),
+                        ActionType = GetMouseAction(((ComboBoxItem)ActionType.SelectedItem).Content.ToString())
                     },
-                    TimeSinceStartOfRecording = 1 //MainWindow.GetCuurentTimestamp((DataContext as MainWindowViewModel)?.ActiveMacro?.Events)
+                    TimeSinceStartOfRecording = MainWindow.GetCuurentTimestamp(MainWindow.MainWindoeInstanceForMouseEvent.ActiveMacro.Events)
                 };
-                (DataContext as MainWindowViewModel)?.ActiveMacro?.AddEvent(virtualMouse);
+                MainWindow.MainWindoeInstanceForMouseEvent.ActiveMacro.AddEvent(virtualMouse);
+                this.Close();
             }
         }
     }

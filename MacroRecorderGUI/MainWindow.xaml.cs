@@ -101,22 +101,24 @@ namespace MacroRecorderGUI
             (DataContext as MainWindowViewModel)?.AddNewTab();
         }
 
+        static public MainWindowViewModel MainWindoeInstanceForMouseEvent;
         private void CaptureEvent_Click(object sender, RoutedEventArgs e)
         {
+            MainWindoeInstanceForMouseEvent = DataContext as MainWindowViewModel;
             //var NewWindow = new CaptureEventWindow();
             //NewWindow.Show();
-            SimulatedMouseEvent.MousePoint position = SimulatedMouseEvent.GetCursorPosition();
-            InputEvent virtualMouse = new InputEvent
-            {
-                MouseEvent = new InputEvent.Types.MouseEventType
-                {
-                    X = position.X,
-                    Y = position.Y,
-                    ActionType = (int)SimulatedMouseEvent.MouseEventFlags.Absolute,
-                },
-                TimeSinceStartOfRecording = GetCuurentTimestamp((DataContext as MainWindowViewModel)?.ActiveMacro?.Events)
-            };
-            (DataContext as MainWindowViewModel)?.ActiveMacro?.AddEvent(virtualMouse);
+            //SimulatedMouseEvent.MousePoint position = SimulatedMouseEvent.GetCursorPosition();
+            //InputEvent virtualMouse = new InputEvent
+            //{
+            //    MouseEvent = new InputEvent.Types.MouseEventType
+            //    {
+            //        X = position.X,
+            //        Y = position.Y,
+            //        ActionType = (int)SimulatedMouseEvent.MouseEventFlags.Absolute,
+            //    },
+            //    TimeSinceStartOfRecording = GetCuurentTimestamp((DataContext as MainWindowViewModel)?.ActiveMacro?.Events)
+            //};
+            //(DataContext as MainWindowViewModel)?.ActiveMacro?.AddEvent(virtualMouse);
             var NewWindow = new CaptureEventWindow();
             NewWindow.Show();
 
@@ -124,24 +126,7 @@ namespace MacroRecorderGUI
             //this.KeyUp += new KeyEventHandler(Form1_KeyEvent);
             //this.MouseEnter += new MouseEventHandler(MouseRecorder_ActionRecorded);
         }
-        private void MouseRecorder_ActionRecorded(object sender, MouseEventArgs e)
-        {
-            //InputEvent virtualMouse = new InputEvent
-            //{
-            //    MouseEvent = new InputEvent.Types.MouseEventType
-            //    {
-            //        X = System.Windows.Forms.Control.MousePosition.X,
-            //        Y = System.Windows.Forms.Control.MousePosition.Y,
-            //        ActionType = 0,
-            //        WheelRotation = 0,
-            //        RelativePosition = false,
-            //        MappedToVirtualDesktop = false
-            //    }, 
-            //    TimeSinceStartOfRecording = 0
-            //};
-            //(DataContext as MainWindowViewModel)?.ActiveMacro?.AddEvent(virtualMouse);
-            //this.MouseEnter -= new MouseEventHandler(MouseRecorder_ActionRecorded);
-        }
+
         static public ulong GetCuurentTimestamp(ObservableCollection<InputEvent> events)
         {
             return events.Count > 0 ? events[events.Count - 1].TimeSinceStartOfRecording : 0;

@@ -12,12 +12,12 @@
             <ComboBoxItem x:Name="Mouse_Event" Content="Mouse Event" HorizontalAlignment="Left" Width="118" AutomationProperties.Name="MouseEvent"/>
             <ComboBoxItem x:Name="Keybaord_Event" Content="Keyboard Event" HorizontalAlignment="Left" Width="118"/>
         </ComboBox>
-        <TextBox x:Name="MouseXTextBox" HorizontalAlignment="Left" Height="23" Margin="80,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Visibility="Visible" TextChanged="TextBox_TextChanged"/>
+        <TextBox x:Name="MouseXTextBox" HorizontalAlignment="Left" Height="23" Margin="80,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Visibility="Visible"/>
         <Label x:Name="MouseXLabel" Content="X:" HorizontalAlignment="Left" Margin="55,109,0,0" VerticalAlignment="Top" Visibility="Visible"/>
         <TextBox x:Name="MouseYTextBox" HorizontalAlignment="Left" Height="23" Margin="250,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Visibility="Visible"/>
         <Label x:Name="MouseYLabel" Content="Y:" HorizontalAlignment="Left" Margin="225,109,0,0" VerticalAlignment="Top" Visibility="Visible"/>
-        <Label x:Name="ActionLabel" Content="Action" HorizontalAlignment="Left" Margin="389,109,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="ActionType" HorizontalAlignment="Left" Margin="454,113,0,0" VerticalAlignment="Top" Width="120">
+        <Label x:Name="ActionLabel" Content="Action" HorizontalAlignment="Left" Margin="389,109,0,0" VerticalAlignment="Top" Visibility="Visible"/>
+        <ComboBox x:Name="ActionType" HorizontalAlignment="Left" Margin="454,113,0,0" VerticalAlignment="Top" Width="120" Visibility="Visible">
             <ComboBoxItem x:Name="LeftDown" Content="LeftDown" HorizontalAlignment="Left" Width="118"/>
             <ComboBoxItem x:Name="LeftUp" Content="LeftUp" HorizontalAlignment="Left" Width="118"/>
             <ComboBoxItem x:Name="RightDown" Content="RightDown" HorizontalAlignment="Left" Width="118"/>
