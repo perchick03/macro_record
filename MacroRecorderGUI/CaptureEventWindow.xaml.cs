@@ -22,16 +22,33 @@ namespace MacroRecorderGUI
     /// </summary>
     public partial class CaptureEventWindow : Window
     {
-        public bool TrackMouse { get; set; } = false;
+        public int TrackMouse { get; set; } = 0;
         public Point MousePosition { get; set; }
 
         public CaptureEventWindow()
         {
             InitializeComponent();
+            //this.Closed += new EventHandler(CaptureEventWindow_Closing);
+            this.Closing += CaptureEventWindow_Closing;
             MouseXTextBox.Text = "X";
             MouseYTextBox.Text = "Y";
 
         }
+
+        private void CaptureEventWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var tracking = TrackMouse;
+            while (Interlocked.Exchange(ref tracking, 1) ==1)
+            {              
+            }
+            TrackMouse = 0;
+            Interlocked.Exchange(ref tracking, 0);
+        }
+
+        //void CaptureEventWindow_Closing(object sender, EventArgs e)
+        //{
+            
+        //}
         static private uint GetMouseAction(string MouseAction)
         {
             switch(MouseAction)
@@ -73,7 +90,7 @@ namespace MacroRecorderGUI
                 ActionLabel.Visibility = Visibility.Visible;
                 ActionType.Visibility = Visibility.Visible;
 
-                TrackMouse = true;
+                TrackMouse = 1;
                 this.KeyDown += new KeyEventHandler(Form1_KeyEvent);
                 Thread mouseTrackerThread = new Thread(MouseTracker);
                 mouseTrackerThread.Start();
@@ -119,27 +136,35 @@ namespace MacroRecorderGUI
 
         private void MouseTracker()
         {
-            
-            while (TrackMouse)
+            var tracking = TrackMouse;
+            while(0 == Interlocked.Exchange(ref tracking, 1))
             {
                 this.Dispatcher.Invoke((Action)(() =>
                 {
-                    MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
+                    MousePosition = PointToScreen(Mouse.GetPosition(this));
+                    //MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
                     //double x = Mouse.GetPosition(Application.Current.MainWindow).X;
                     //double y = Mouse.GetPosition(Application.Current.MainWindow).Y;
 
                     lblx.Content = MousePosition.X.ToString();
                     lbly.Content = MousePosition.Y.ToString();
                 }));
+                Interlocked.Exchange(ref tracking, 0);
             }
         }
 
         void Form1_KeyEvent(object sender, KeyEventArgs e)
         {
-            MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
+            //MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
             if (e.Key == Key.Return)
             {
-                TrackMouse = false;
+                //var tracking = TrackMouse;
+                //while (Interlocked.Exchange(ref tracking, 1) == 1)
+                //{
+                //}
+                TrackMouse = 0;
+               // Interlocked.Exchange(ref tracking, 0);
+                
                 this.KeyDown -= new KeyEventHandler(Form1_KeyEvent);
                 MouseXTextBox.Text = MousePosition.X.ToString();
                 MouseYTextBox.Text = MousePosition.Y.ToString();
