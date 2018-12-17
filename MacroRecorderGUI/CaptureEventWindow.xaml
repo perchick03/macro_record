@@ -29,6 +29,20 @@
             <ComboBoxItem x:Name="MouseMove" Content="MouseMove" HorizontalAlignment="Left" Width="118" Height="18"/>
         </ComboBox>
         <Button x:Name="EnterEvent" Content="Enter" HorizontalAlignment="Left" Margin="54,163,0,0" VerticalAlignment="Top" Width="75" Click="EnterEvent_Click"/>
+        <Canvas x:Name="Mouse_Motion_Traclker" HorizontalAlignment="Left" Height="109" Margin="617,22,0,0" VerticalAlignment="Top" Width="160" RenderTransformOrigin="0.5,0.5" Background="#FFD8E4C3">
+            <Canvas.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.223"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Canvas.RenderTransform>
+            <Label x:Name="X" Content="X" Canvas.Left="43" Canvas.Top="20" FontFamily="Century Gothic" FontWeight="Bold" FontSize="14" RenderTransformOrigin="0.533,1.073"/>
+            <Label x:Name="X_Copy" Content="Y" Canvas.Left="43" Canvas.Top="64" FontFamily="Century Gothic" FontWeight="Bold" FontSize="14" RenderTransformOrigin="0.533,1.073"/>
+            <Label x:Name="lblx" Content="0000" Canvas.Left="76" Canvas.Top="20" FontFamily="Century Gothic" FontWeight="Bold" FontSize="14" RenderTransformOrigin="0.533,1.073"/>
+            <Label x:Name="lbly" Content="0000" Canvas.Left="76" Canvas.Top="64" FontFamily="Century Gothic" FontWeight="Bold" FontSize="14" RenderTransformOrigin="0.533,1.073"/>
+        </Canvas>
 
     </Grid>
 </Window>

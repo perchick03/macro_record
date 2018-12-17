@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,6 +22,9 @@ namespace MacroRecorderGUI
     /// </summary>
     public partial class CaptureEventWindow : Window
     {
+        public bool TrackMouse { get; set; } = false;
+        public Point MousePosition { get; set; }
+
         public CaptureEventWindow()
         {
             InitializeComponent();
@@ -68,8 +72,13 @@ namespace MacroRecorderGUI
 
                 ActionLabel.Visibility = Visibility.Visible;
                 ActionType.Visibility = Visibility.Visible;
+
+                TrackMouse = true;
+                this.KeyDown += new KeyEventHandler(Form1_KeyEvent);
+                Thread mouseTrackerThread = new Thread(MouseTracker);
+                mouseTrackerThread.Start();
             }
-            
+
         }
 
         private void ActionType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -105,6 +114,35 @@ namespace MacroRecorderGUI
                 };
                 MainWindow.MainWindoeInstanceForMouseEvent.ActiveMacro.AddEvent(virtualMouse);
                 this.Close();
+            }
+        }
+
+        private void MouseTracker()
+        {
+            
+            while (TrackMouse)
+            {
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
+                    //double x = Mouse.GetPosition(Application.Current.MainWindow).X;
+                    //double y = Mouse.GetPosition(Application.Current.MainWindow).Y;
+
+                    lblx.Content = MousePosition.X.ToString();
+                    lbly.Content = MousePosition.Y.ToString();
+                }));
+            }
+        }
+
+        void Form1_KeyEvent(object sender, KeyEventArgs e)
+        {
+            MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
+            if (e.Key == Key.Return)
+            {
+                TrackMouse = false;
+                this.KeyDown -= new KeyEventHandler(Form1_KeyEvent);
+                MouseXTextBox.Text = MousePosition.X.ToString();
+                MouseYTextBox.Text = MousePosition.Y.ToString();
             }
         }
     }
