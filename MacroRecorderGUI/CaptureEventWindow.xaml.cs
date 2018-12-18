@@ -30,6 +30,7 @@ namespace MacroRecorderGUI
         {
             InitializeComponent();
             //this.Closed += new EventHandler(CaptureEventWindow_Closing);
+
             mousePositionTracker = new Thread(MouseTracker);
             this.Closing += CaptureEventWindow_Closing;
             //MouseXTextBox.Text = "X";
@@ -148,7 +149,6 @@ namespace MacroRecorderGUI
                     lblx.Content = MousePosition.X.ToString();
                     lbly.Content = MousePosition.Y.ToString();
                 }));
-                
             }
         }
 
@@ -157,12 +157,9 @@ namespace MacroRecorderGUI
             //MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
             if (e.Key == Key.Return)
             {
-                //var tracking = TrackMouse;
-                //while (Interlocked.Exchange(ref tracking, 1) == 1)
-                //{
-                //}
+                
                 TrackMouse = false;
-               // Interlocked.Exchange(ref tracking, 0);
+
                 
                 this.KeyDown -= new KeyEventHandler(Form1_KeyEvent);
                 MouseXTextBox.Text = MousePosition.X.ToString();
