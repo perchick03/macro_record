@@ -14,6 +14,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Diagnostics;
+using System.Windows.Threading;
+using System.Runtime.InteropServices;
 
 namespace MacroRecorderGUI
 {
@@ -22,7 +25,10 @@ namespace MacroRecorderGUI
     /// </summary>
     public partial class CaptureEventWindow : Window
     {
-        public bool TrackMouse { get; set; } = false;
+        static private volatile bool trackMoust = false;
+        static public bool TrackMouse { get { return trackMoust; } set { trackMoust = value; } }
+
+        //TODO:  checnge to System.Drawing.Point
         public Point MousePosition { get; set; }
         private Thread mousePositionTracker;
 
@@ -31,19 +37,30 @@ namespace MacroRecorderGUI
             InitializeComponent();
             //this.Closed += new EventHandler(CaptureEventWindow_Closing);
 
-            mousePositionTracker = new Thread(MouseTracker);
-            this.Closing += CaptureEventWindow_Closing;
+            
+            
+            //this.Closing += CaptureEventWindow_Closing;
+            //this.Closed += CaptureEventWindow_Closed;
             //MouseXTextBox.Text = "X";
             //MouseYTextBox.Text = "Y";
 
         }
 
+        private void CaptureEventWindow_Closed(object sender, EventArgs e)
+        {
+            TrackMouse = false;
+            //Thread.Sleep(2000);
+        }
+
         private void CaptureEventWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             TrackMouse = false;
+            
+            // MessageBox.Show("going to sleep");
+            
             mousePositionTracker.Join();
-            MessageBox.Show("closing window");
-            this.Close();
+            //MessageBox.Show("closing window");
+          //  this.Close();
         }
 
         //void CaptureEventWindow_Closing(object sender, EventArgs e)
@@ -81,7 +98,8 @@ namespace MacroRecorderGUI
             string SelectedItem = ((ComboBoxItem)ComboBoxEvent.SelectedItem).Content.ToString();
             
             if (SelectedItem == "Mouse Event")
-            {               
+            {
+                mousePositionTracker = new Thread(MouseTracker);
                 MouseXLabel.Visibility = Visibility.Visible;
                 MouseYLabel.Visibility = Visibility.Visible;
 
@@ -131,25 +149,47 @@ namespace MacroRecorderGUI
                     TimeSinceStartOfRecording = MainWindow.GetCuurentTimestamp(MainWindow.MainWindoeInstanceForMouseEvent.ActiveMacro.Events)
                 };
                 MainWindow.MainWindoeInstanceForMouseEvent.ActiveMacro.AddEvent(virtualMouse);
+                this.KeyDown -= new KeyEventHandler(Form1_KeyEvent);
                 this.Close();
             }
         }
+        [DllImport("user32.dll")]
+        static extern bool GetCursorPos(ref Point lpPoint);
 
         private void MouseTracker()
         {
-            while(TrackMouse)
+            while (TrackMouse)
             {
-                this.Dispatcher.Invoke((Action)(() =>
+                this.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    MousePosition = PointToScreen(Mouse.GetPosition(this));
-                    //MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
-                    //double x = Mouse.GetPosition(Application.Current.MainWindow).X;
-                    //double y = Mouse.GetPosition(Application.Current.MainWindow).Y;
+                    //Point pt = new Point();
+                    //GetCursorPos(ref pt);
+                    System.Drawing.Point pt = System.Windows.Forms.Cursor.Position;
+                    //MousePosition = PointToScreen(Mouse.GetPosition(this));
+                    lblx.Content = pt.X.ToString();
+                    lbly.Content = pt.Y.ToString();
+                    Point t = new Point { X = pt.X, Y = pt.Y };
+                    MousePosition = t;
 
-                    lblx.Content = MousePosition.X.ToString();
-                    lbly.Content = MousePosition.Y.ToString();
-                }));
+                }), DispatcherPriority.ContextIdle, null);
+                //this.Dispatcher.Invoke((Action)(() =>
+                //{
+                //    MousePosition = PointToScreen(Mouse.GetPosition(this));
+                //    MousePosition = Mouse.GetPosition(Application.Current.MainWindow);
+                //    double x = Mouse.GetPosition(Application.Current.MainWindow).X;
+                //    double y = Mouse.GetPosition(Application.Current.MainWindow).Y;
+
+                //    lblx.Content = MousePosition.X.ToString();
+                //    lbly.Content = MousePosition.Y.ToString();
+
+                //}));
+                Debug.WriteLine($"looping {TrackMouse}");
+                Thread.Sleep(500);
+                
+
+
             }
+            Debug.WriteLine("exiting thread");
         }
 
         void Form1_KeyEvent(object sender, KeyEventArgs e)
@@ -161,10 +201,20 @@ namespace MacroRecorderGUI
                 TrackMouse = false;
 
                 
-                this.KeyDown -= new KeyEventHandler(Form1_KeyEvent);
+               
                 MouseXTextBox.Text = MousePosition.X.ToString();
                 MouseYTextBox.Text = MousePosition.Y.ToString();
             }
+        }
+
+        private void CaptureEventWindow_Closed(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+       //     e.Cancel = true;
+        //    this.Visibility = Visibility.Hidden;
+            TrackMouse = false;
+
+            mousePositionTracker.Join();
+            // e.Cancel = false;
         }
     }
 }

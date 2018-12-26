@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MacroRecorderGUI"
         mc:Ignorable="d"
-        Title="CaptureEventWindow" Height="252.101" Width="800">
+        Title="CaptureEventWindow" Height="252.101" Width="800" Closing="CaptureEventWindow_Closed">
     <Grid>
         <Label Content="Capture Event" HorizontalAlignment="Left" Margin="317,23,0,0" VerticalAlignment="Top" Width="136" FontSize="16" FontWeight="Bold"/>
         <ComboBox x:Name="ComboBoxEvent" HorizontalAlignment="Left" Margin="54,65,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged">
